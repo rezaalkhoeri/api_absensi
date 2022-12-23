@@ -44,15 +44,25 @@ class Absensi {
     var data = json.decode(bodyRequest);
 
     var id_pegawai = data["id_pegawai"];
-    var masuk = data["id_masuk"];
+    var masuk = data["jam_masuk"];
     var keluar = data["jam_keluar"];
-    var tanggal = data["jam_masuk"];
+    var tanggal = data["tanggal"];
     var status = data["status"];
 
-    await conn.query(
-        "INSERT INTO absen (id_pegawai, jam_masuk, jam_keluar, tanggal, status) VALUES (?,?,?,?,?)",
-        [id_pegawai, masuk, keluar, tanggal, status]);
+    if (status == '1') {
+      await conn.query(
+          "INSERT INTO absen (id_pegawai, jam_masuk, jam_keluar, tanggal, status) VALUES (?,?,?,?,?)",
+          [id_pegawai, masuk, keluar, tanggal, status]);
 
-    return Response.ok("Insert Absensi Success");
+      await conn.close();
+      return Response.ok("Insert Absensi Success");
+    } else {
+      await conn.query(
+          "UPDATE absen SET jam_keluar=?, status=? WHERE id_pegawai=?",
+          [keluar, status, id_pegawai]);
+
+      await conn.close();
+      return Response.ok("Update Absensi Success");
+    }
   }
 }

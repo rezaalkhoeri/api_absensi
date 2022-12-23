@@ -52,7 +52,7 @@ final _router = Router()
 
   // TRX Absensi
   ..get('/getAbsensi', absensi.getAbsensi)
-  ..post('/absensiPegawai ', absensi.absensiPegawai);
+  ..post('/absensiPegawai', absensi.absensiPegawai);
 
 Response _rootHandler(Request req) {
   return Response.ok('Hello, World!\n');
